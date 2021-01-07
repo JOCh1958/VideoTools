@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoRecConFFMPEG", "VideoRecConFFMPEG\VideoRecConFFMPEG.csproj", "{445819D7-B788-4B49-9D5A-A0D51850E2FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {833A2116-296F-4C7B-A10F-5BF65148A0A4}
+	EndGlobalSection
+EndGlobal
