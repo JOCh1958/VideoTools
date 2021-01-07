@@ -20,9 +20,40 @@ namespace VideoRecConFFMPEG
 	/// </summary>
 	public partial class MainWindowVideoRec : Window
 		{
+		public static MainWindowVideoRec mainWindows { get; set; }
+		public ViewModel.MainViewModel viewModel { get; set; }
+
 		public MainWindowVideoRec()
 			{
+			mainWindows = this;
+
 			InitializeComponent();
+
+			if ((DataContext != null) && (DataContext is ViewModel.MainViewModel))
+				{
+				viewModel = DataContext as ViewModel.MainViewModel;
+				}
+			else
+				{
+				DataContext = viewModel = new ViewModel.MainViewModel();
+				}
+			}
+
+		private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+			{
+			base.OnMouseLeftButtonDown(e);
+
+			this.DragMove();
+			}
+
+		private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+			{
+
+			}
+
+		private void Grid_MouseMove(object sender, MouseEventArgs e)
+			{
+
 			}
 		}
 	}
