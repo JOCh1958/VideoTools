@@ -1,0 +1,96 @@
+﻿<Window x:Class="VideoRecConFFMPEG.View.AgregarEditarCamaraView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VideoRecConFFMPEG.View"
+		xmlns:locvm="clr-namespace:VideoRecConFFMPEG.ViewModel"
+        mc:Ignorable="d"
+		WindowStartupLocation="CenterOwner"
+        Title="{Binding WinTitulo}"
+		Height="200" Width="1024">
+	
+	<Window.DataContext>
+		<locvm:AgregarEditarCamaraViewModel/>
+	</Window.DataContext>
+
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+			<!--<ColumnDefinition MaxWidth="120" MinWidth="120"/>-->
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="50"/>
+			<RowDefinition Height="24"/>
+			<RowDefinition Height="24"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0">
+			<StackPanel Orientation="Vertical" Margin="4, 0, 0, 0" MinWidth="75" ToolTip="Indica si la camara esta activa">
+				<Label Content="Camara activa" Padding="0"/>
+				<CheckBox IsChecked="{Binding camara.activa}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="4, 0, 0, 0" MinWidth="75" ToolTip="Indica si la camara se graba">
+				<Label Content="Grabar camara" Padding="0"/>
+				<CheckBox IsChecked="{Binding camara.grabar}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="4, 0, 0, 0" MinWidth="100" ToolTip="Nombre de la camara. ej. Patio Trasero">
+				<Label Content="Nombre de camara" Padding="0"/>
+				<TextBox Text="{Binding camara.nombre}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="4, 0, 0, 0" MinWidth="100" ToolTip="Descripción de la camara. ej. Camara de patio trasero angulo desde la casa">
+				<Label Content="descripción de camara" Padding="0"/>
+				<TextBox Text="{Binding camara.descripcion}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="100" ToolTip="URL o IP de la camara">
+				<Label Content="URL de camara (ip)" Padding="0"/>
+				<TextBox Text="{Binding camara.url}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="100" ToolTip="String de conexión de la camara, salvo indicación dejar en blanco">
+				<Label Content="string de conexión" Padding="0"/>
+				<TextBox Text="{Binding camara.conexion}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="40" ToolTip="Puerto RTSP de la camara (default 554)">
+				<Label Content="RTSP" Padding="0"/>
+				<TextBox Text="{Binding camara.portRtsp}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="40" ToolTip="Puerto HTTP de la camara (default 80)">
+				<Label Content="HTTP" Padding="0"/>
+				<TextBox Text="{Binding camara.portHttp}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="100" ToolTip="file prefix de las grabaciones de la camara">
+				<Label Content="File prefix" Padding="0"/>
+				<TextBox Text="{Binding camara.filePrefix}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="80" ToolTip="Usuario de la camara">
+				<Label Content="Usuario" Padding="0"/>
+				<TextBox Text="{Binding camara.usuario}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="80" ToolTip="password de usuario de la camara">
+				<Label Content="Password" Padding="0"/>
+				<TextBox Text="{Binding camara.password}"/>
+			</StackPanel>
+
+		</StackPanel>
+
+		<Button Command="{Binding GuardarAgregarCamaraCommand}" Content="Guardar" Grid.Column="0" Grid.Row="1" Margin="4, 0, 0, 0" Padding="0, 0, 0, 0"/>
+		<Button Command="{Binding CancelarCamaraCommand}" Content="Cancelar" Grid.Column="1" Grid.Row="1" Margin="4, 0, 0, 0" Padding="0, 0, 0, 0"/>
+
+	</Grid>
+</Window>

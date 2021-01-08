@@ -81,10 +81,123 @@ namespace VideoRecConFFMPEG.ViewModel
 			OpenExeFFMPEGCommand = new Extras.RelayCommand(OpenExeFile, param => CanCloseWindows);
 			OpenDataCommand = new Extras.RelayCommand(OpenDataDir, param => CanCloseWindows);
 
-			ListaDeItemsCamara = new List<itemsCamara>();
-			ListaDeItemsCamara.Add(new itemsCamara { activa = true, nombre = "camara 01", ip = "192.168.0.90", usuario = "admin", password = "admin" });
-			ListaDeItemsCamara.Add(new itemsCamara { activa = true, nombre = "camara 02", ip = "192.168.0.91", usuario = "admin", password = "admin" });
-			ListaDeItemsCamara.Add(new itemsCamara { activa = true, nombre = "camara 03", ip = "192.168.0.92", usuario = "admin", password = "admin" });
+			AgregarCamaraCommand = new Extras.RelayCommand(AgregarCamara, param => CanCloseWindows);
+			GuardarLosCambiosCommand = new Extras.RelayCommand(GuardarLosCambios, param => CanCloseWindows);
+
+			IniciarGrabacionesCommand = new Extras.RelayCommand(IniciarGrabaciones, param => CanCloseWindows);
+			DetenerGrabacionesCommand = new Extras.RelayCommand(DetenerGrabaciones, param => CanCloseWindows);
+
+			//ListaDeCamaras = new List<Extras.DescriptorDeCamara>();
+			//ListaDeCamaras.Add(new Extras.DescriptorDeCamara { activa = true, grabar = false, nombre = "camara 01", url = "192.168.0.90", conexion = "none", portRtsp = 554, portHttp = 80, usuario = "admin", password = "admin" });
+			//ListaDeCamaras.Add(new Extras.DescriptorDeCamara { activa = true, grabar = false, nombre = "camara 02", url = "192.168.0.91", conexion = "none", portRtsp = 554, portHttp = 80, usuario = "admin", password = "admin" });
+			//ListaDeCamaras.Add(new Extras.DescriptorDeCamara { activa = true, grabar = false, nombre = "camara 03", url = "192.168.0.92", conexion = "none", portRtsp = 554, portHttp = 80, usuario = "admin", password = "admin" });
+
+			LogDeActividad += $"Inicializando la app: {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}\r\n";
+			}
+
+		string AppTitulo_v = "VideoRecConFFMPEG 1.0.0 byJOCh";
+		public string AppTitulo
+			{
+			get => AppTitulo_v;
+			set
+				{
+				if (AppTitulo_v != value)
+					{
+					AppTitulo_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		string LogDeActividad_v = string.Empty;
+		public string LogDeActividad
+			{
+			get => LogDeActividad_v;
+			set
+				{
+				if (LogDeActividad_v != value)
+					{
+					LogDeActividad_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		#region propiedades
+		public string directorioFFMPEG
+			{
+			get => model.directorioFFMPEG;
+			set
+				{
+				if (model.directorioFFMPEG != value)
+					{
+					model.directorioFFMPEG = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		public string dataDir
+			{
+			get => model.dataDir;
+			set
+				{
+				if (model.dataDir != value)
+					{
+					model.dataDir = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		// List<Extras.DescriptorDeCamara> ListaDeItemsCamara_v;
+		public List<Extras.DescriptorDeCamara> ListaDeCamaras
+			{
+			get => model.ListaDeCamaras;
+			set
+				{
+				if (model.ListaDeCamaras != value)
+					{
+					model.ListaDeCamaras = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		List<Extras.EjecucionDeApp> ListaDeEjecucionesDeGrabacion_v;
+		public List<Extras.EjecucionDeApp> ListaDeEjecucionesDeGrabacion
+			{
+			get => ListaDeEjecucionesDeGrabacion_v;
+			set
+				{
+				if (ListaDeEjecucionesDeGrabacion_v != value)
+					{
+					ListaDeEjecucionesDeGrabacion_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+		#endregion propiedades
+
+		#region funciones_de_comandos
+		public void AgregarCamara(object obj)
+			{
+			Extras.DescriptorDeCamara cam = new Extras.DescriptorDeCamara { activa = false, grabar = false, nombre = "nombre", descripcion = "descripcion", url = "192.168.", conexion = "none", portRtsp = 554, portHttp = 80, filePrefix = "algo", usuario = "admin", password = "admin" };
+			View.AgregarEditarCamaraView win = new View.AgregarEditarCamaraView(MainWindowVideoRec.mainWindows, cam, "Agregar camara nueva");
+			if (win.ShowDialog() == true)
+				{
+				List<Extras.DescriptorDeCamara> camaras = new List<Extras.DescriptorDeCamara>(ListaDeCamaras);
+				camaras.Add(cam);
+
+				ListaDeCamaras = camaras;
+
+				LogDeActividad += $"Se agrego la camara: {cam.nombre}\r\n";
+				}
+			}
+
+		public void GuardarLosCambios(object obj)
+			{
+			model.Salvar();
 			}
 
 		private void OpenExeFile(object sender)
@@ -154,43 +267,69 @@ namespace VideoRecConFFMPEG.ViewModel
 				}
 			}
 
+		public void IniciarGrabaciones(object obj)
+			{
+			ListaDeEjecucionesDeGrabacion = new List<Extras.EjecucionDeApp>();
+			foreach (Extras.DescriptorDeCamara camara in ListaDeCamaras)
+				{
+				if (camara.activa && camara.grabar)
+					{
+					// 2 horas de grabacion 7200, 30 minutos = 1800
+					string lineaFFMPEG = $"-rtsp_transport tcp -y -i rtsp://{camara.usuario}:{camara.password}@{camara.url}:{camara.portRtsp} -t 7200 ";
+					Extras.EjecucionDeApp exe = new Extras.EjecucionDeApp(System.IO.Path.Combine(directorioFFMPEG, "ffmpeg.exe"), dataDir, lineaFFMPEG, System.IO.Path.Combine(dataDir, $"{camara.filePrefix}{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss.ffff")}.mp4"));
+					exe.executionEnd += this.Exe_executionEnd;
+					}
+				}
+			}
+
+		private void Exe_executionEnd(object sender)
+			{
+			Extras.EjecucionDeApp exe = sender as Extras.EjecucionDeApp;
+			LogDeActividad += $"{exe.outputExecString}\r\n";
+
+			//this.Dispatcher.Invoke(new Action(() =>
+			//{
+			//	listaDeEjecucionesTerminadas_01.Add(exe01.comandoQueSeEjeuta);
+			//	resultFFMpeg01 = exe01.outputExecString;
+			//}));
+
+			//if (repetirAlTerminar01)
+			//	{
+			//	btnTestFFMPeg01(null, null);
+			//	}
+			}
+
+		public void DetenerGrabaciones(object obj)
+			{
+			}
+		#endregion funciones_de_comandos
+
 		public bool CanCloseWindows { get; set; } = true;
 
-		public string directorioFFMPEG
+		#region comandos
+		System.Windows.Input.ICommand AgregarCamaraCommand_v;
+		public System.Windows.Input.ICommand AgregarCamaraCommand
 			{
-			get => model.directorioFFMPEG;
+			get => AgregarCamaraCommand_v;
 			set
 				{
-				if (model.directorioFFMPEG != value)
+				if (AgregarCamaraCommand_v != value)
 					{
-					model.directorioFFMPEG = value;
+					AgregarCamaraCommand_v = value;
 					NotifyPropertyChanged();
 					}
 				}
 			}
 
-		public string dataDir
+		System.Windows.Input.ICommand GuardarLosCambiosCommand_v;
+		public System.Windows.Input.ICommand GuardarLosCambiosCommand
 			{
-			get => model.dataDir;
+			get => GuardarLosCambiosCommand_v;
 			set
 				{
-				if (model.dataDir != value)
+				if (GuardarLosCambiosCommand_v != value)
 					{
-					model.dataDir = value;
-					NotifyPropertyChanged();
-					}
-				}
-			}
-
-		List<itemsCamara> ListaDeItemsCamara_v;
-		public List<itemsCamara> ListaDeItemsCamara
-			{
-			get => ListaDeItemsCamara_v;
-			set
-				{
-				if (ListaDeItemsCamara_v != value)
-					{
-					ListaDeItemsCamara_v = value;
+					GuardarLosCambiosCommand_v = value;
 					NotifyPropertyChanged();
 					}
 				}
@@ -266,6 +405,33 @@ namespace VideoRecConFFMPEG.ViewModel
 				}
 			}
 
+		System.Windows.Input.ICommand DetenerGrabacionesCommand_v;
+		public System.Windows.Input.ICommand DetenerGrabacionesCommand
+			{
+			get => DetenerGrabacionesCommand_v;
+			set
+				{
+				if (DetenerGrabacionesCommand_v != value)
+					{
+					DetenerGrabacionesCommand_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
 
+		System.Windows.Input.ICommand IniciarGrabacionesCommand_v;
+		public System.Windows.Input.ICommand IniciarGrabacionesCommand
+			{
+			get => IniciarGrabacionesCommand_v;
+			set
+				{
+				if (IniciarGrabacionesCommand_v != value)
+					{
+					IniciarGrabacionesCommand_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+		#endregion comandos
 		}
 	}

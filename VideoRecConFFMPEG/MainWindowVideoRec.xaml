@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:VideoRecConFFMPEG"
 		xmlns:locvm="clr-namespace:VideoRecConFFMPEG.ViewModel"
         mc:Ignorable="d"
-        Title="{Binding mainTitle}" 
+        Title="{Binding AppTitulo}" 
 		WindowStyle="None"
 		WindowStartupLocation="CenterScreen"
 		Background="#FF308717" 
 		Height="768" Width="1024">
-	
+
 	<Window.DataContext>
 		<locvm:MainViewModel/>
 	</Window.DataContext>
@@ -29,6 +29,8 @@
 			<RowDefinition Height="24"/>
 			<RowDefinition Height="24"/>
 			<RowDefinition Height="24"/>
+			<RowDefinition Height="24"/>
+			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
@@ -115,23 +117,206 @@
 		</Grid>
 
 		<Button Grid.Column="0" Grid.Row="1" Command="{Binding OpenExeFFMPEGCommand}" Content="Buscar ffmpeg.exe..."/>
-		<TextBlock Text="{Binding directorioFFMPEG, FallbackValue=none}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="1" FontSize="10" FontFamily="Arial" TextWrapping="NoWrap" Padding="2, 4, 0, 0" Margin="0, 0, 0, 0"/>
+		<TextBlock Text="{Binding directorioFFMPEG, FallbackValue=none}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" FontSize="10" FontFamily="Arial" TextWrapping="NoWrap" Padding="2, 4, 0, 0" Margin="0, 0, 0, 0"/>
 
-		<Button Grid.Column="0" Grid.Row="2" Command="{Binding OpenDataCommand}" Content="Buscar data dir..."/>
-		<TextBlock Text="{Binding dataDir, FallbackValue=none}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="1" FontSize="10" FontFamily="Arial" TextWrapping="NoWrap" Padding="2, 4, 0, 0" Margin="0, 0, 0, 0"/>
+		<Button Grid.Column="0" Grid.Row="2" Command="{Binding OpenDataCommand}" Content="Buscar data dir..." Margin="0,0,0,0"/>
+		<TextBlock Text="{Binding dataDir, FallbackValue=none}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" FontSize="10" FontFamily="Arial" TextWrapping="NoWrap" Padding="2, 4, 0, 0" Margin="0, 0, 0, 0"/>
 
-		<ListBox Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="3" SelectionMode="Multiple" ItemsSource="{Binding ListaDeItemsCamara, Mode=OneWay}">
+		<Button Grid.Column="0" Grid.Row="3" Command="{Binding AgregarCamaraCommand}" Content="Agregar camara..." Margin="0,0,0,0"/>
+
+		<Button Grid.Column="3" Grid.Row="3" Command="{Binding GuardarLosCambiosCommand}" Content="Guardar todo..." Margin="0,0,0,0"/>
+		
+		<!--<ListBox Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4" SelectionMode="Multiple" ItemsSource="{Binding ListaDeItemsCamara, Mode=OneWay}">
+			<ListBox.Template>
+				<ControlTemplate>
+					<DockPanel LastChildFill="True">
+						<Grid DockPanel.Dock="Top" Height="15">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="30"></ColumnDefinition>
+								<ColumnDefinition Width="30"></ColumnDefinition>
+								<ColumnDefinition Width="105"></ColumnDefinition>
+								<ColumnDefinition Width="105"></ColumnDefinition>
+								<ColumnDefinition Width="105"></ColumnDefinition>
+								<ColumnDefinition Width="105"></ColumnDefinition>
+								<ColumnDefinition Width="105"></ColumnDefinition>
+								<ColumnDefinition Width="105"></ColumnDefinition>
+								<ColumnDefinition Width="105"></ColumnDefinition>
+								<ColumnDefinition Width="105"></ColumnDefinition>
+								<ColumnDefinition Width="105"></ColumnDefinition>
+							</Grid.ColumnDefinitions>
+							<Label Grid.Column="0" Padding="0" ToolTip="Indica si la camara esta activa">Act.</Label>
+							<Label Grid.Column="1" Padding="0" ToolTip="Indica si la camara se graba">Gra.</Label>
+							<Label Grid.Column="2" Padding="0" ToolTip="Nombre de la camara. ej. Patio Trasero">Nombre</Label>
+							<Label Grid.Column="3" Padding="0" ToolTip="Descripción de la camara. ej. Camara de patio trasero angulo desde la casa">Descripción</Label>
+							<Label Grid.Column="4" Padding="0" ToolTip="URL o IP de la camara">url</Label>
+							<Label Grid.Column="5" Padding="0" ToolTip="String de conexión de la camara">conexión</Label>
+							<Label Grid.Column="6" Padding="0" ToolTip="Puerto RTSP de la camara">RTSP</Label>
+							<Label Grid.Column="7" Padding="0" ToolTip="Puerto HTTP de la camara">HTTP</Label>
+							<Label Grid.Column="8" Padding="0" ToolTip="file prefix de las grabaciones de la camara">prefix</Label>
+							<Label Grid.Column="9" Padding="0" ToolTip="Usuario de la camara">usuario</Label>
+							<Label Grid.Column="10" Padding="0" ToolTip="password de usuario de la camara">password</Label>
+						</Grid>
+						<ItemsPresenter></ItemsPresenter>
+					</DockPanel>
+				</ControlTemplate>
+			</ListBox.Template>
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal">
-						<CheckBox IsChecked="{Binding activa}" MinWidth="20" Margin="0,0,0,0"/>
-						<TextBox Text="{Binding nombre}" MinWidth="100" Margin="5,0,0,0"/>
-						<TextBox Text="{Binding ip}" MinWidth="100" Margin="5,0,0,0"/>
-						<TextBox Text="{Binding usuario}" MinWidth="100" Margin="5,0,0,0"/>
-						<TextBox Text="{Binding password}" MinWidth="100" Margin="5,0,0,0"/>
+						<CheckBox IsChecked="{Binding activa}" MinWidth="25" MaxWidth="20" Margin="0,0,0,0"/>
+						<CheckBox IsChecked="{Binding grabar}" MinWidth="25" MaxWidth="20" Margin="5,0,0,0"/>
+						<TextBox Text="{Binding nombre}" MinWidth="100" MaxWidth="100" Margin="5,0,0,0"/>
+						<TextBox Text="{Binding descripcion}" MinWidth="100" MaxWidth="100" Margin="5,0,0,0"/>
+						<TextBox Text="{Binding url}" MinWidth="100" MaxWidth="100" Margin="5,0,0,0"/>
+						<TextBox Text="{Binding conexion}" MinWidth="100" MaxWidth="100" Margin="5,0,0,0"/>
+						<TextBox Text="{Binding portRtsp}" MinWidth="100" MaxWidth="100" Margin="5,0,0,0"/>
+						<TextBox Text="{Binding portHttp}" MinWidth="100" MaxWidth="100" Margin="5,0,0,0"/>
+						<TextBox Text="{Binding filePrefix}" MinWidth="100" MaxWidth="100" Margin="5,0,0,0"/>
+						<TextBox Text="{Binding usuario}" MinWidth="100" MaxWidth="100" Margin="5,0,0,0"/>
+						<TextBox Text="{Binding password}" MinWidth="100" MaxWidth="100" Margin="5,0,0,0"/>
 					</StackPanel>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
-		</ListBox>
+		</ListBox>-->
+
+		<ListView Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4" ItemsSource="{Binding ListaDeItemsCamara, Mode=OneWay}" SelectedItem="{Binding camaraSeleccionada}" Background="#FF308717" >
+			<ListView.View>
+				<GridView>
+					<!--
+					Modo simple de generar una columna
+					<GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
+					-->
+					<GridView.Columns>
+						<GridViewColumn Width="50">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<Button Content="  ...  " ToolTip="Borrar la camara (eliminar de esta lista)"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="Borrar" ToolTip="Borrar la camara (eliminar de esta lista)"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="30">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox IsChecked="{Binding activa}"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="Act." ToolTip="Indica si la camara esta activa"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="30">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox IsChecked="{Binding grabar}"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="Gra." ToolTip="Indica si la camara se graba"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding nombre}" Width="85"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="Nombre" ToolTip="Nombre de la camara. ej. Patio Trasero"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding descripcion}" Width="85"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="Descripción" ToolTip="Descripción de la camara. ej. Camara de patio trasero angulo desde la casa"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding url}" Width="85"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="url / ip" ToolTip="URL o IP de la camara"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding conexion}" Width="85"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="Conexión" ToolTip="String de conexión de la camara, salvo indicación dejar en blanco"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding portRtsp}" Width="85"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="RTSP" ToolTip="Puerto RTSP de la camara (default 554)"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding portHttp}" Width="85"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="HTTP" ToolTip="Puerto HTTP de la camara (default 80)"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding filePrefix}" Width="85"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="file Prefix" ToolTip="file prefix de las grabaciones de la camara"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding usuario}" Width="85"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="Usuario" ToolTip="Usuario de la camara"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+						<GridViewColumn Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding password}" Width="85"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+							<GridViewColumn.Header>
+								<TextBlock Text="Password" ToolTip="password de usuario de la camara"/>
+							</GridViewColumn.Header>
+						</GridViewColumn>
+					</GridView.Columns>
+				</GridView>
+			</ListView.View>
+
+		</ListView>
+
+		<StackPanel Grid.Column="0" Grid.Row="5" >
+			<Button Content="Iniciar grabaciones..." Margin="0" Padding="0"/>
+		</StackPanel>
+
+		<TextBox Text="{Binding LogDeActividad}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5"/>
 	</Grid>
 </Window>
