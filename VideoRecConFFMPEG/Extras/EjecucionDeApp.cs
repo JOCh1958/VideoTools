@@ -24,7 +24,21 @@ namespace VideoRecConFFMPEG.Extras
 			}
 		#endregion mvvm
 
-		#region bindings
+		#region propiedades
+		internal Object objPariente_v = null;
+		public Object objPariente
+			{
+			get
+				{
+				return objPariente_v;
+				}
+			set
+				{
+				objPariente_v = value;
+				NotifyPropertyChanged();
+				}
+			}
+
 		internal bool onWork_v = true;
 		public bool onWork
 			{
@@ -277,7 +291,7 @@ namespace VideoRecConFFMPEG.Extras
 				}
 			}
 
-		#endregion bindings
+		#endregion propiedades
 
 		public delegate void ReporteDesdeObjetoExeApp(object sender);
 		public event ReporteDesdeObjetoExeApp executionEnd;

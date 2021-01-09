@@ -18,6 +18,7 @@ namespace VideoRecConFFMPEG.Model
 
 		public string directorioFFMPEG { get; set; }
 		public string dataDir { get; set; }
+		public int TiempoDeGrabacionesEnSegundos { get; set; }
 
 		public List<Extras.DescriptorDeCamara> ListaDeCamaras { get; set; }
 
@@ -31,6 +32,8 @@ namespace VideoRecConFFMPEG.Model
 				{
 				appByJOChKey.SetValue("directorioFFMPEG", directorioFFMPEG);
 				appByJOChKey.SetValue("dataDir", dataDir);
+				appByJOChKey.SetValue("TiempoDeGrabacionesEnSegundos", TiempoDeGrabacionesEnSegundos.ToString());
+
 				appByJOChKey.SetValue("listaDeCamaras", json);
 				}
 			catch (Exception ex)
@@ -50,6 +53,7 @@ namespace VideoRecConFFMPEG.Model
 				{
 				directorioFFMPEG = appByJOChKey.GetValue("directorioFFMPEG", System.IO.Path.GetDirectoryName(System.Environment.GetCommandLineArgs()[0])).ToString();
 				dataDir = appByJOChKey.GetValue("dataDir", System.IO.Path.GetDirectoryName(System.Environment.GetCommandLineArgs()[0])).ToString();
+				TiempoDeGrabacionesEnSegundos = int.Parse(appByJOChKey.GetValue("TiempoDeGrabacionesEnSegundos", "30").ToString());
 				}
 			catch (Exception ex)
 				{

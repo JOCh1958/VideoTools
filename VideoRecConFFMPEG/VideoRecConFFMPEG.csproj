@@ -6,10 +6,13 @@
     <UseWPF>true</UseWPF>
     <Company>ABMData</Company>
     <Description>VideoRecConFFMPEG con binarios externos de FFMPEG</Description>
-    <Copyright>byJOCh</Copyright>
+    <Copyright>byJOCh2021</Copyright>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VideoRecConFFMPEG_onJOCh.pfx</AssemblyOriginatorKeyFile>
+    <NeutralLanguage>es-AR</NeutralLanguage>
+    <PackageReleaseNotes>Primera version por comentarios o requerimientos envie un eMail a joch@msn.com</PackageReleaseNotes>
+    <ApplicationIcon>Imagenes\VideoRec.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

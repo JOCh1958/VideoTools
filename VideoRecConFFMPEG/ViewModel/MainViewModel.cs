@@ -73,26 +73,29 @@ namespace VideoRecConFFMPEG.ViewModel
 		public MainViewModel()
 			{
 			model = new Model.MainModel(appByJOChKey);
+			DatosDeConfiguracionModificados = false;
 
 			AppCloseCommand = new Extras.RelayCommand(CloseMainWindows, param => CanCloseWindows);
 			AppMaximizeCommand = new Extras.RelayCommand(MaximizeMainWindows, param => CanCloseWindows);
 			AppMinimizeCommand = new Extras.RelayCommand(MinimizeMainWindows, param => CanCloseWindows);
 
-			OpenExeFFMPEGCommand = new Extras.RelayCommand(OpenExeFile, param => CanCloseWindows);
-			OpenDataCommand = new Extras.RelayCommand(OpenDataDir, param => CanCloseWindows);
+			OpenExeFFMPEGCommand = new Extras.RelayCommand(OpenExeFile, param => CanStartGrabaciones);
+			OpenDataCommand = new Extras.RelayCommand(OpenDataDir, param => CanStartGrabaciones);
 
-			AgregarCamaraCommand = new Extras.RelayCommand(AgregarCamara, param => CanCloseWindows);
-			GuardarLosCambiosCommand = new Extras.RelayCommand(GuardarLosCambios, param => CanCloseWindows);
+			AgregarCamaraCommand = new Extras.RelayCommand(AgregarCamara, param => CanStartGrabaciones);
 
-			IniciarGrabacionesCommand = new Extras.RelayCommand(IniciarGrabaciones, param => CanCloseWindows);
-			DetenerGrabacionesCommand = new Extras.RelayCommand(DetenerGrabaciones, param => CanCloseWindows);
+			GuardarLosCambiosCommand = new Extras.RelayCommand(GuardarLosCambios, param => DatosDeConfiguracionModificados);
 
+			IniciarGrabacionesCommand = new Extras.RelayCommand(IniciarGrabaciones, param => CanStartGrabaciones);
+			DetenerGrabacionesCommand = new Extras.RelayCommand(DetenerGrabaciones, param => CanStopGrabaciones);
+
+			TiempoDeGrabacionesCommand = new Extras.RelayCommand(TiempoDeGrabaciones, param => CanStartGrabaciones);
 			//ListaDeCamaras = new List<Extras.DescriptorDeCamara>();
 			//ListaDeCamaras.Add(new Extras.DescriptorDeCamara { activa = true, grabar = false, nombre = "camara 01", url = "192.168.0.90", conexion = "none", portRtsp = 554, portHttp = 80, usuario = "admin", password = "admin" });
 			//ListaDeCamaras.Add(new Extras.DescriptorDeCamara { activa = true, grabar = false, nombre = "camara 02", url = "192.168.0.91", conexion = "none", portRtsp = 554, portHttp = 80, usuario = "admin", password = "admin" });
 			//ListaDeCamaras.Add(new Extras.DescriptorDeCamara { activa = true, grabar = false, nombre = "camara 03", url = "192.168.0.92", conexion = "none", portRtsp = 554, portHttp = 80, usuario = "admin", password = "admin" });
 
-			LogDeActividad += $"Inicializando la app: {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}\r\n";
+			LogDeActividad += $"Inicializando la app: {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} con {ListaDeCamaras.Count} camaras.\r\n";
 			}
 
 		string AppTitulo_v = "VideoRecConFFMPEG 1.0.0 byJOCh";
@@ -131,6 +134,7 @@ namespace VideoRecConFFMPEG.ViewModel
 				{
 				if (model.directorioFFMPEG != value)
 					{
+					DatosDeConfiguracionModificados = true;
 					model.directorioFFMPEG = value;
 					NotifyPropertyChanged();
 					}
@@ -144,7 +148,22 @@ namespace VideoRecConFFMPEG.ViewModel
 				{
 				if (model.dataDir != value)
 					{
+					DatosDeConfiguracionModificados = true;
 					model.dataDir = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		public int TiempoDeGrabacionesEnSegundos
+			{
+			get => model.TiempoDeGrabacionesEnSegundos;
+			set
+				{
+				if (model.TiempoDeGrabacionesEnSegundos != value)
+					{
+					DatosDeConfiguracionModificados = true;
+					model.TiempoDeGrabacionesEnSegundos = value;
 					NotifyPropertyChanged();
 					}
 				}
@@ -158,21 +177,64 @@ namespace VideoRecConFFMPEG.ViewModel
 				{
 				if (model.ListaDeCamaras != value)
 					{
+					DatosDeConfiguracionModificados = true;
 					model.ListaDeCamaras = value;
 					NotifyPropertyChanged();
 					}
 				}
 			}
 
-		List<Extras.EjecucionDeApp> ListaDeEjecucionesDeGrabacion_v;
-		public List<Extras.EjecucionDeApp> ListaDeEjecucionesDeGrabacion
+		//List<Extras.EjecucionDeApp> ListaDeEjecucionesDeGrabacion_v;
+		//public List<Extras.EjecucionDeApp> ListaDeEjecucionesDeGrabacion
+		//	{
+		//	get => ListaDeEjecucionesDeGrabacion_v;
+		//	set
+		//		{
+		//		if (ListaDeEjecucionesDeGrabacion_v != value)
+		//			{
+		//			ListaDeEjecucionesDeGrabacion_v = value;
+		//			NotifyPropertyChanged();
+		//			}
+		//		}
+		//	}
+
+		bool CanStopGrabaciones_v = false;
+		public bool CanStopGrabaciones
 			{
-			get => ListaDeEjecucionesDeGrabacion_v;
+			get => CanStopGrabaciones_v;
 			set
 				{
-				if (ListaDeEjecucionesDeGrabacion_v != value)
+				if (CanStopGrabaciones_v != value)
 					{
-					ListaDeEjecucionesDeGrabacion_v = value;
+					CanStopGrabaciones_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		bool CanStartGrabaciones_v = true;
+		public bool CanStartGrabaciones
+			{
+			get => CanStartGrabaciones_v;
+			set
+				{
+				if (CanStartGrabaciones_v != value)
+					{
+					CanStartGrabaciones_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		bool DatosDeConfiguracionModificados_v = false;
+		public bool DatosDeConfiguracionModificados
+			{
+			get => DatosDeConfiguracionModificados_v;
+			set
+				{
+				if (DatosDeConfiguracionModificados_v != value)
+					{
+					DatosDeConfiguracionModificados_v = value;
 					NotifyPropertyChanged();
 					}
 				}
@@ -198,6 +260,7 @@ namespace VideoRecConFFMPEG.ViewModel
 		public void GuardarLosCambios(object obj)
 			{
 			model.Salvar();
+			DatosDeConfiguracionModificados = false;
 			}
 
 		private void OpenExeFile(object sender)
@@ -269,23 +332,94 @@ namespace VideoRecConFFMPEG.ViewModel
 
 		public void IniciarGrabaciones(object obj)
 			{
-			ListaDeEjecucionesDeGrabacion = new List<Extras.EjecucionDeApp>();
-			foreach (Extras.DescriptorDeCamara camara in ListaDeCamaras)
+			CanStartGrabaciones = false;
+
+			// Primero vamos a parar cualquier posible linea de ejecucion
+			lock (objExeLock)
 				{
-				if (camara.activa && camara.grabar)
+				repetirAlTerminar = false;		// bloqueamos el posible reinicio de las grabaciones
+				foreach (Extras.DescriptorDeCamara camara in ListaDeCamaras)
 					{
-					// 2 horas de grabacion 7200, 30 minutos = 1800
-					string lineaFFMPEG = $"-rtsp_transport tcp -y -i rtsp://{camara.usuario}:{camara.password}@{camara.url}:{camara.portRtsp} -t 7200 ";
-					Extras.EjecucionDeApp exe = new Extras.EjecucionDeApp(System.IO.Path.Combine(directorioFFMPEG, "ffmpeg.exe"), dataDir, lineaFFMPEG, System.IO.Path.Combine(dataDir, $"{camara.filePrefix}{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss.ffff")}.mp4"));
-					exe.executionEnd += this.Exe_executionEnd;
+					camara.camExe?.TerminarThread();
+					camara.camExe = null;
 					}
+				}
+
+			// 2 segundos de delay para que se acomoden los threads que podrian estar en ejecución
+			System.Threading.Thread.Sleep(2000);
+
+			// ListaDeEjecucionesDeGrabacion = new List<Extras.EjecucionDeApp>();
+			lock (objExeLock)
+				{
+				repetirAlTerminar = true;      // a partir de aca permitimos que se reinicien las grabaciones
+				foreach (Extras.DescriptorDeCamara camara in ListaDeCamaras)
+					{
+					IniciarGrabacionDeCamara(camara);
+					//if (camara.activa && camara.grabar)
+					//	{
+					//	// 2 horas de grabacion 7200, 30 minutos = 1800
+					//	string lineaFFMPEG = $"-rtsp_transport tcp -y -i rtsp://{camara.usuario}:{camara.password}@{camara.url}:{camara.portRtsp} -t 7200 ";
+					//	camara.camExe = new Extras.EjecucionDeApp(System.IO.Path.Combine(directorioFFMPEG, "ffmpeg.exe"), dataDir, lineaFFMPEG, System.IO.Path.Combine(dataDir, $"{camara.filePrefix}{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss.ffff")}.mp4"));
+					//	camara.camExe.objPariente = camara;			// cross reference
+					//	camara.camExe.executionEnd += this.Exe_executionEnd;
+					//	System.Threading.Thread.Sleep(25);
+					//	}
+					}
+				}
+
+			CanStopGrabaciones = true;
+			}
+
+		void IniciarGrabacionDeCamara(Extras.DescriptorDeCamara camara)
+			{
+			if (camara.activa && camara.grabar)
+				{
+				// 2 horas de grabacion 7200, 30 minutos = 1800
+				string lineaFFMPEG = $"-rtsp_transport tcp -y -i rtsp://{camara.usuario}:{camara.password}@{camara.url}:{camara.portRtsp} -t {TiempoDeGrabacionesEnSegundos} ";
+				//lineaFFMPEG += "-loglevel warning ";    // baja bastante el nivel de logs
+				//lineaFFMPEG += "-nostats ";             // no muy bueno
+				//lineaFFMPEG += "-hide_banner ";         // solo elimina la info del principio
+				//lineaFFMPEG += "-loglevel error ";      // no muestra nada supongo que si hay error si
+				//lineaFFMPEG += "-loglevel quiet ";      // practicamente 0 info
+				//lineaFFMPEG += "-loglevel panic ";      // practicamente 0 info
+				//lineaFFMPEG += "-loglevel fatal ";      // practicamente 0 info
+				lineaFFMPEG += "-loglevel warning ";    // pocos datos, sin banner y sin resumen
+				//lineaFFMPEG += "-loglevel info ";       // algo de info y la ultima linea como se va alterando
+				//lineaFFMPEG += "-loglevel verbose ";    // bastante info
+				//lineaFFMPEG += "-loglevel debug ";      // mucha info, mucha
+				camara.camExe = new Extras.EjecucionDeApp(System.IO.Path.Combine(directorioFFMPEG, "ffmpeg.exe"), dataDir, lineaFFMPEG, System.IO.Path.Combine(dataDir, $"{camara.filePrefix}{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss.ffff")}.mp4"));
+				camara.camExe.objPariente = camara;         // cross reference
+				camara.camExe.executionEnd += this.Exe_executionEnd;
+				LogDeActividad += $"Iniciando rec: {camara.camExe.appToExecute} {camara.camExe.parametrosDeEjecucion}\r\n";
+
+				camara.camExe.EjecuctarEnThread();
+				System.Threading.Thread.Sleep(25);
 				}
 			}
 
+		Object objExeLock { get; } = new Object();
+		bool repetirAlTerminar { get; set; } = true;
+
 		private void Exe_executionEnd(object sender)
 			{
-			Extras.EjecucionDeApp exe = sender as Extras.EjecucionDeApp;
-			LogDeActividad += $"{exe.outputExecString}\r\n";
+			lock (objExeLock)
+				{
+				Extras.EjecucionDeApp exe = sender as Extras.EjecucionDeApp;
+				if (exe != null)
+					{
+					LogDeActividad += $"{exe.outputExecString}\r\n";
+					}
+
+				if (repetirAlTerminar)
+					{
+					Extras.DescriptorDeCamara camara = exe.objPariente as Extras.DescriptorDeCamara;
+					if (camara != null)
+						{
+						// re-lanzamos la ejecucion del grabador
+						IniciarGrabacionDeCamara(camara);
+						}
+					}
+				}
 
 			//this.Dispatcher.Invoke(new Action(() =>
 			//{
@@ -301,6 +435,31 @@ namespace VideoRecConFFMPEG.ViewModel
 
 		public void DetenerGrabaciones(object obj)
 			{
+			CanStopGrabaciones = false;
+			repetirAlTerminar = false;      // bloqueamos el posible reinicio de las grabaciones
+
+			foreach (Extras.DescriptorDeCamara camara in ListaDeCamaras)
+				{
+				camara.camExe ?.SendKeyToProcess("q");
+				System.Threading.Thread.Sleep(5);
+
+				//camara.camExe?.TerminarThread();
+				//camara.camExe = null;
+				}
+
+			lock (objExeLock)
+				{
+				CanStartGrabaciones = true;
+				}
+			}
+
+		public void TiempoDeGrabaciones(object obj)
+			{
+			int newTimeValue = 30;
+			if (int.TryParse(obj as string, out newTimeValue))
+				{
+				TiempoDeGrabacionesEnSegundos = newTimeValue;
+				}
 			}
 		#endregion funciones_de_comandos
 
@@ -428,6 +587,20 @@ namespace VideoRecConFFMPEG.ViewModel
 				if (IniciarGrabacionesCommand_v != value)
 					{
 					IniciarGrabacionesCommand_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		System.Windows.Input.ICommand TiempoDeGrabacionesCommand_v;
+		public System.Windows.Input.ICommand TiempoDeGrabacionesCommand
+			{
+			get => TiempoDeGrabacionesCommand_v;
+			set
+				{
+				if (TiempoDeGrabacionesCommand_v != value)
+					{
+					TiempoDeGrabacionesCommand_v = value;
 					NotifyPropertyChanged();
 					}
 				}

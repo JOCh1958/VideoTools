@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace VideoRecConFFMPEG.Extras
@@ -19,5 +20,8 @@ namespace VideoRecConFFMPEG.Extras
 		public string filePrefix { get; set; }
 		public string usuario { get; set; }
 		public string password { get; set; }
+
+		[JsonIgnore]
+		public EjecucionDeApp camExe { get; set; }
 		}
 	}

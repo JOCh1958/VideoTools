@@ -30,7 +30,7 @@
 			<RowDefinition Height="24"/>
 			<RowDefinition Height="24"/>
 			<RowDefinition Height="24"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="0.5*"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
@@ -124,6 +124,15 @@
 
 		<Button Grid.Column="0" Grid.Row="3" Command="{Binding AgregarCamaraCommand}" Content="Agregar camara..." Margin="0,0,0,0"/>
 
+		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
+			<TextBox Text="{Binding TiempoDeGrabacionesEnSegundos}" ToolTip="Tiempo en segundos de las grabaciones" Width="50"/>
+			
+			<Button Command="{Binding TiempoDeGrabacionesCommand}" CommandParameter="600" Content=" 10 min " Margin="0,0,0,0"/>
+			<Button Command="{Binding TiempoDeGrabacionesCommand}" CommandParameter="1800" Content=" 30 min " Margin="2,0,0,0"/>
+			<Button Command="{Binding TiempoDeGrabacionesCommand}" CommandParameter="7200" Content=" 2 hs. " Margin="2,0,0,0"/>
+			<Button Command="{Binding TiempoDeGrabacionesCommand}" CommandParameter="14400" Content=" 4 hs. " Margin="2,0,0,0"/>
+		</StackPanel>
+
 		<Button Grid.Column="3" Grid.Row="3" Command="{Binding GuardarLosCambiosCommand}" Content="Guardar todo..." Margin="0,0,0,0"/>
 		
 		<!--<ListBox Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4" SelectionMode="Multiple" ItemsSource="{Binding ListaDeItemsCamara, Mode=OneWay}">
@@ -179,7 +188,7 @@
 			</ListBox.ItemTemplate>
 		</ListBox>-->
 
-		<ListView Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4" ItemsSource="{Binding ListaDeItemsCamara, Mode=OneWay}" SelectedItem="{Binding camaraSeleccionada}" Background="#FF308717" >
+		<ListView Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4" ItemsSource="{Binding ListaDeCamaras, Mode=OneWay}" SelectedItem="{Binding camaraSeleccionada}" Background="#FF308717" >
 			<ListView.View>
 				<GridView>
 					<!--
@@ -314,9 +323,62 @@
 		</ListView>
 
 		<StackPanel Grid.Column="0" Grid.Row="5" >
-			<Button Content="Iniciar grabaciones..." Margin="0" Padding="0"/>
+			<Button Command="{Binding IniciarGrabacionesCommand}" Content="Iniciar grabaciones..." Margin="2" Padding="0" Height="25"/>
+			<Button Command="{Binding DetenerGrabacionesCommand}" Content="Terminar grabaciones..." Margin="2" Padding="0" Height="25"/>
 		</StackPanel>
 
-		<TextBox Text="{Binding LogDeActividad}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5"/>
+		<TabControl Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5">
+			<TabItem Header="Status">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+					<Grid.RowDefinitions>
+						<RowDefinition Height="24"/>
+						<RowDefinition Height="24"/>
+						<RowDefinition Height="24"/>
+						<RowDefinition Height="24"/>
+						<RowDefinition Height="0.5*"/>
+						<RowDefinition Height="0.5*"/>
+						<RowDefinition Height="0.5*"/>
+						<RowDefinition Height="0.5*"/>
+					</Grid.RowDefinitions>
+
+					<Button Command="{Binding LimpiarLogDeActividadCommand}" Content="Limpiar log de actividad" Margin="2" Padding="0"/>
+				</Grid>
+			</TabItem>
+			
+			<TabItem Header="Video rec's">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+
+					<Grid.RowDefinitions>
+						<RowDefinition Height="24"/>
+						<RowDefinition Height="24"/>
+						<RowDefinition Height="24"/>
+						<RowDefinition Height="24"/>
+						<RowDefinition Height="0.5*"/>
+						<RowDefinition Height="0.5*"/>
+						<RowDefinition Height="0.5*"/>
+						<RowDefinition Height="0.5*"/>
+					</Grid.RowDefinitions>
+
+					<Button Command="{Binding MostrarVideoCommand}" Content="Mostrar video seleccionado" Margin="2" Padding="0"/>
+				</Grid>
+			</TabItem>
+
+			<TabItem Header="Log de Actividad">
+				<TextBox Text="{Binding LogDeActividad}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5" FontSize="10" FontFamily="Consolas" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True"/>
+			</TabItem>
+		</TabControl>
 	</Grid>
 </Window>
