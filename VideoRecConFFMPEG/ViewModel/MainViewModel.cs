@@ -90,6 +90,9 @@ namespace VideoRecConFFMPEG.ViewModel
 			DetenerGrabacionesCommand = new Extras.RelayCommand(DetenerGrabaciones, param => CanStopGrabaciones);
 
 			TiempoDeGrabacionesCommand = new Extras.RelayCommand(TiempoDeGrabaciones, param => CanStartGrabaciones);
+
+			LimpiarLogDeActividadCommand = new Extras.RelayCommand(LimpiarLogDeActividad, param => CanCloseWindows);
+
 			//ListaDeCamaras = new List<Extras.DescriptorDeCamara>();
 			//ListaDeCamaras.Add(new Extras.DescriptorDeCamara { activa = true, grabar = false, nombre = "camara 01", url = "192.168.0.90", conexion = "none", portRtsp = 554, portHttp = 80, usuario = "admin", password = "admin" });
 			//ListaDeCamaras.Add(new Extras.DescriptorDeCamara { activa = true, grabar = false, nombre = "camara 02", url = "192.168.0.91", conexion = "none", portRtsp = 554, portHttp = 80, usuario = "admin", password = "admin" });
@@ -239,6 +242,21 @@ namespace VideoRecConFFMPEG.ViewModel
 					}
 				}
 			}
+
+		List<string> ListaVideoFiles_v = new List<string>();
+		public List<string> ListaVideoFiles
+			{
+			get => ListaVideoFiles_v;
+			set
+				{
+				if (ListaVideoFiles_v != value)
+					{
+					DatosDeConfiguracionModificados = true;
+					ListaVideoFiles_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
 		#endregion propiedades
 
 		#region funciones_de_comandos
@@ -378,22 +396,28 @@ namespace VideoRecConFFMPEG.ViewModel
 				string lineaFFMPEG = $"-rtsp_transport tcp -y -i rtsp://{camara.usuario}:{camara.password}@{camara.url}:{camara.portRtsp} -t {TiempoDeGrabacionesEnSegundos} ";
 				//lineaFFMPEG += "-loglevel warning ";    // baja bastante el nivel de logs
 				//lineaFFMPEG += "-nostats ";             // no muy bueno
-				//lineaFFMPEG += "-hide_banner ";         // solo elimina la info del principio
+				lineaFFMPEG += "-hide_banner ";         // solo elimina la info del principio
 				//lineaFFMPEG += "-loglevel error ";      // no muestra nada supongo que si hay error si
 				//lineaFFMPEG += "-loglevel quiet ";      // practicamente 0 info
 				//lineaFFMPEG += "-loglevel panic ";      // practicamente 0 info
 				//lineaFFMPEG += "-loglevel fatal ";      // practicamente 0 info
-				lineaFFMPEG += "-loglevel warning ";    // pocos datos, sin banner y sin resumen
+				//lineaFFMPEG += "-loglevel warning ";    // pocos datos, sin banner y sin resumen
 				//lineaFFMPEG += "-loglevel info ";       // algo de info y la ultima linea como se va alterando
 				//lineaFFMPEG += "-loglevel verbose ";    // bastante info
 				//lineaFFMPEG += "-loglevel debug ";      // mucha info, mucha
-				camara.camExe = new Extras.EjecucionDeApp(System.IO.Path.Combine(directorioFFMPEG, "ffmpeg.exe"), dataDir, lineaFFMPEG, System.IO.Path.Combine(dataDir, $"{camara.filePrefix}{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss.ffff")}.mp4"));
+
+				string videoFile = System.IO.Path.Combine(dataDir, $"{camara.filePrefix}{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss.ffff")}.mp4");
+				camara.camExe = new Extras.EjecucionDeApp(System.IO.Path.Combine(directorioFFMPEG, "ffmpeg.exe"), dataDir, lineaFFMPEG, videoFile);
 				camara.camExe.objPariente = camara;         // cross reference
 				camara.camExe.executionEnd += this.Exe_executionEnd;
 				LogDeActividad += $"Iniciando rec: {camara.camExe.appToExecute} {camara.camExe.parametrosDeEjecucion}\r\n";
 
-				camara.camExe.EjecuctarEnThread();
-				System.Threading.Thread.Sleep(25);
+				ListaVideoFiles.Add(videoFile);
+				NotifyPropertyChanged("ListaVideoFiles");
+
+				camara.camTask = Task.Run( () => camara.camExe.EjecuctarApp());
+				//camara.camExe.EjecuctarEnThread();
+				//System.Threading.Thread.Sleep(25);
 				}
 			}
 
@@ -461,8 +485,13 @@ namespace VideoRecConFFMPEG.ViewModel
 				TiempoDeGrabacionesEnSegundos = newTimeValue;
 				}
 			}
-		#endregion funciones_de_comandos
 
+		public void LimpiarLogDeActividad(object obj)
+			{
+			LogDeActividad = string.Empty;
+			}
+		#endregion funciones_de_comandos
+		
 		public bool CanCloseWindows { get; set; } = true;
 
 		#region comandos
@@ -601,6 +630,20 @@ namespace VideoRecConFFMPEG.ViewModel
 				if (TiempoDeGrabacionesCommand_v != value)
 					{
 					TiempoDeGrabacionesCommand_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		System.Windows.Input.ICommand LimpiarLogDeActividadCommand_v;
+		public System.Windows.Input.ICommand LimpiarLogDeActividadCommand
+			{
+			get => LimpiarLogDeActividadCommand_v;
+			set
+				{
+				if (LimpiarLogDeActividadCommand_v != value)
+					{
+					LimpiarLogDeActividadCommand_v = value;
 					NotifyPropertyChanged();
 					}
 				}

@@ -23,5 +23,8 @@ namespace VideoRecConFFMPEG.Extras
 
 		[JsonIgnore]
 		public EjecucionDeApp camExe { get; set; }
+
+		[JsonIgnore]
+		public Task camTask { get; set; }
 		}
 	}
