@@ -31,6 +31,7 @@
 			<RowDefinition Height="24"/>
 			<RowDefinition Height="24"/>
 			<RowDefinition Height="0.5*"/>
+			<RowDefinition Height="24"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
@@ -125,7 +126,7 @@
 		<Button Grid.Column="0" Grid.Row="3" Command="{Binding AgregarCamaraCommand}" Content="Agregar camara..." Margin="0,0,0,0"/>
 
 		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
-			<TextBox Text="{Binding TiempoDeGrabacionesEnSegundos}" ToolTip="Tiempo en segundos de las grabaciones" Width="50"/>
+			<TextBox Text="{Binding TiempoDeGrabacionesEnSegundos}" IsEnabled="{Binding CanStartGrabaciones}" ToolTip="Tiempo en segundos de las grabaciones" Width="50"/>
 
 			<Button Command="{Binding TiempoDeGrabacionesCommand}" CommandParameter="600" Content=" 10 min " Margin="0,0,0,0"/>
 			<Button Command="{Binding TiempoDeGrabacionesCommand}" CommandParameter="1800" Content=" 30 min " Margin="2,0,0,0"/>
@@ -188,7 +189,7 @@
 			</ListBox.ItemTemplate>
 		</ListBox>-->
 
-		<ListView Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4" ItemsSource="{Binding ListaDeCamaras, Mode=OneWay}" SelectedItem="{Binding camaraSeleccionada}" Background="#FF308717" >
+		<ListView Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4" ItemsSource="{Binding ListaDeCamaras, Mode=OneWay}" SelectedItem="{Binding camaraSeleccionada}" IsEnabled="{Binding CanStartGrabaciones}" Background="#FF308717" >
 			<ListView.View>
 				<GridView>
 					<!--
@@ -322,12 +323,15 @@
 
 		</ListView>
 
-		<StackPanel Grid.Column="0" Grid.Row="5" >
+		<TextBlock Text="{Binding LastRecFile, FallbackValue=none}" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="5" TextWrapping="NoWrap" Padding="2, 4, 0, 0" Margin="0, 0, 0, 0"/>
+
+		<StackPanel Grid.Column="0" Grid.Row="6" >
+			<CheckBox IsChecked="{Binding GenerarFicherosH264}" IsEnabled="{Binding CanStartGrabaciones}" Content="Generar Grabaciones H264"/>
 			<Button Command="{Binding IniciarGrabacionesCommand}" Content="Iniciar grabaciones..." Margin="2" Padding="0" Height="25"/>
 			<Button Command="{Binding DetenerGrabacionesCommand}" Content="Terminar grabaciones..." Margin="2" Padding="0" Height="25"/>
 		</StackPanel>
 
-		<TabControl Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5">
+		<TabControl Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="6">
 			<TabItem Header="Status">
 				<Grid>
 					<Grid.ColumnDefinitions>
@@ -340,9 +344,9 @@
 
 					<Grid.RowDefinitions>
 						<RowDefinition Height="24"/>
-						<RowDefinition Height="24"/>
-						<RowDefinition Height="24"/>
-						<RowDefinition Height="24"/>
+						<RowDefinition Height="4"/>
+						<RowDefinition Height="4"/>
+						<RowDefinition Height="4"/>
 						<RowDefinition Height="0.5*"/>
 						<RowDefinition Height="0.5*"/>
 						<RowDefinition Height="0.5*"/>
@@ -350,16 +354,19 @@
 					</Grid.RowDefinitions>
 
 					<Button Command="{Binding LimpiarLogDeActividadCommand}" Content="Limpiar log de actividad" Margin="2,2,2,2" Padding="0" Grid.ColumnSpan="2"/>
+					<ListBox ItemsSource="{Binding ListaVideoFiles}" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="4" Grid.RowSpan="4"/>
 				</Grid>
 			</TabItem>
 
 			<TabItem Header="Video rec's">
 				<Grid>
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*"/>
-						<ColumnDefinition Width="*"/>
-						<ColumnDefinition Width="*"/>
-						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="10*"/>
+						<ColumnDefinition Width="13*"/>
+						<ColumnDefinition Width="168*"/>
+						<ColumnDefinition Width="191*"/>
+						<ColumnDefinition Width="191*"/>
+						<ColumnDefinition Width="191*"/>
 					</Grid.ColumnDefinitions>
 
 					<Grid.RowDefinitions>
@@ -373,8 +380,8 @@
 						<RowDefinition Height="0.5*"/>
 					</Grid.RowDefinitions>
 
-					<Button Grid.Column="0" Grid.Row="0" Command="{Binding MostrarVideoCommand}" Content="Mostrar video seleccionado" Margin="2" Padding="0"/>
-					<ListBox ItemsSource="{Binding ListaVideoFiles}" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4" Grid.RowSpan="4"/>
+					<Button Grid.Column="0" Grid.Row="0" Command="{Binding MostrarVideoCommand}" Content="Mostrar video seleccionado" Margin="2,2,3,2" Padding="0" Grid.ColumnSpan="3"/>
+					<ListBox ItemsSource="{Binding ListaVideoFiles}" Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Grid.RowSpan="4"/>
 				</Grid>
 			</TabItem>
 

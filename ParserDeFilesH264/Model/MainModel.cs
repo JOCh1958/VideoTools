@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace VideoRecConFFMPEG.Model
+namespace ParserDeFilesH264.Model
 	{
 	public class MainModel
 		{
@@ -18,9 +16,8 @@ namespace VideoRecConFFMPEG.Model
 
 		public string directorioFFMPEG { get; set; }
 		public string dataDir { get; set; }
+		public string lastBinPairFile { get; set; }
 		public int TiempoDeGrabacionesEnSegundos { get; set; }
-
-		public List<Extras.DescriptorDeCamara> ListaDeCamaras { get; set; }
 
 		public bool GenerarFicherosH264 { get; set; }
 
@@ -28,17 +25,14 @@ namespace VideoRecConFFMPEG.Model
 			{
 			if (appByJOChKey == null) return false;
 
-			var json = System.Text.Json.JsonSerializer.Serialize(ListaDeCamaras);
-
 			try
 				{
 				appByJOChKey.SetValue("directorioFFMPEG", directorioFFMPEG);
 				appByJOChKey.SetValue("dataDir", dataDir);
+				appByJOChKey.SetValue("lastBinPairFile", lastBinPairFile);
 				appByJOChKey.SetValue("TiempoDeGrabacionesEnSegundos", TiempoDeGrabacionesEnSegundos.ToString());
 
 				appByJOChKey.SetValue("GenerarFicherosH264", GenerarFicherosH264);
-
-				appByJOChKey.SetValue("listaDeCamaras", json);
 				}
 			catch (Exception ex)
 				{
@@ -57,28 +51,13 @@ namespace VideoRecConFFMPEG.Model
 				{
 				directorioFFMPEG = appByJOChKey.GetValue("directorioFFMPEG", System.IO.Path.GetDirectoryName(System.Environment.GetCommandLineArgs()[0])).ToString();
 				dataDir = appByJOChKey.GetValue("dataDir", System.IO.Path.GetDirectoryName(System.Environment.GetCommandLineArgs()[0])).ToString();
+				lastBinPairFile = appByJOChKey.GetValue("lastBinPairFile", @"d:\").ToString();
 				TiempoDeGrabacionesEnSegundos = int.Parse(appByJOChKey.GetValue("TiempoDeGrabacionesEnSegundos", "30").ToString());
 
 				GenerarFicherosH264 = bool.Parse(appByJOChKey.GetValue("GenerarFicherosH264", "False").ToString());
 				}
 			catch (Exception ex)
 				{
-				}
-
-			try
-				{
-				ListaDeCamaras = System.Text.Json.JsonSerializer.Deserialize<List<Extras.DescriptorDeCamara>>(appByJOChKey.GetValue("listaDeCamaras", "").ToString());
-				if (ListaDeCamaras == null)
-					{
-					ListaDeCamaras = new List<Extras.DescriptorDeCamara>();
-					}
-				}
-			catch (Exception ex)
-				{
-				if (ex.Source?.Contains("System.Text.Json") == true)
-					{
-					ListaDeCamaras = new List<Extras.DescriptorDeCamara>();
-					}
 				}
 
 			return true;

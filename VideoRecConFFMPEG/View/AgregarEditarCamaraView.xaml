@@ -9,7 +9,7 @@
 		WindowStartupLocation="CenterOwner"
         Title="{Binding WinTitulo}"
 		Height="200" Width="1024">
-	
+
 	<Window.DataContext>
 		<locvm:AgregarEditarCamaraViewModel/>
 	</Window.DataContext>
@@ -42,47 +42,47 @@
 				<CheckBox IsChecked="{Binding camara.grabar}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Vertical" Margin="4, 0, 0, 0" MinWidth="100" ToolTip="Nombre de la camara. ej. Patio Trasero">
+			<StackPanel Orientation="Vertical" Margin="4, 0, 0, 0" Width="100" ToolTip="Nombre de la camara. ej. Patio Trasero">
 				<Label Content="Nombre de camara" Padding="0"/>
 				<TextBox Text="{Binding camara.nombre}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Vertical" Margin="4, 0, 0, 0" MinWidth="100" ToolTip="Descripción de la camara. ej. Camara de patio trasero angulo desde la casa">
+			<StackPanel Orientation="Vertical" Margin="4, 0, 0, 0" Width="100" ToolTip="Descripción de la camara. ej. Camara de patio trasero angulo desde la casa">
 				<Label Content="descripción de camara" Padding="0"/>
 				<TextBox Text="{Binding camara.descripcion}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="100" ToolTip="URL o IP de la camara">
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" Width="100" ToolTip="URL o IP de la camara">
 				<Label Content="URL de camara (ip)" Padding="0"/>
 				<TextBox Text="{Binding camara.url}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="100" ToolTip="String de conexión de la camara, salvo indicación dejar en blanco">
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" Width="120" ToolTip="String de conexión de la camara, salvo indicación dejar en blanco">
 				<Label Content="string de conexión" Padding="0"/>
 				<TextBox Text="{Binding camara.conexion}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="40" ToolTip="Puerto RTSP de la camara (default 554)">
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" Width="40" ToolTip="Puerto RTSP de la camara (default 554)">
 				<Label Content="RTSP" Padding="0"/>
 				<TextBox Text="{Binding camara.portRtsp}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="40" ToolTip="Puerto HTTP de la camara (default 80)">
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" Width="40" ToolTip="Puerto HTTP de la camara (default 80)">
 				<Label Content="HTTP" Padding="0"/>
 				<TextBox Text="{Binding camara.portHttp}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="100" ToolTip="file prefix de las grabaciones de la camara">
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" Width="100" ToolTip="file prefix de las grabaciones de la camara">
 				<Label Content="File prefix" Padding="0"/>
 				<TextBox Text="{Binding camara.filePrefix}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="80" ToolTip="Usuario de la camara">
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" Width="80" ToolTip="Usuario de la camara">
 				<Label Content="Usuario" Padding="0"/>
 				<TextBox Text="{Binding camara.usuario}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" MinWidth="80" ToolTip="password de usuario de la camara">
+			<StackPanel Orientation="Vertical" Margin="5, 0, 0, 0" Width="80" ToolTip="password de usuario de la camara">
 				<Label Content="Password" Padding="0"/>
 				<TextBox Text="{Binding camara.password}"/>
 			</StackPanel>
@@ -92,5 +92,13 @@
 		<Button Command="{Binding GuardarAgregarCamaraCommand}" Content="Guardar" Grid.Column="0" Grid.Row="1" Margin="4, 0, 0, 0" Padding="0, 0, 0, 0"/>
 		<Button Command="{Binding CancelarCamaraCommand}" Content="Cancelar" Grid.Column="1" Grid.Row="1" Margin="4, 0, 0, 0" Padding="0, 0, 0, 0"/>
 
+		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top">
+			<Button Command="{Binding AgregarStringDeConexionCommand}" Content="Dahua standar" Margin="4, 2, 0, 0" Padding="0, 0, 0, 0" CommandParameter="/cam/realmonitor"/>
+		</StackPanel>
+
+		<StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top">
+			<Button Command="{Binding AgregarStringDeConexionCommand}" Content="Axis 640x360" Margin="4, 2, 0, 0" Padding="0, 0, 0, 0" CommandParameter="/axis-media/media.amp?resolution=640x360&amp;fps=10"/>
+			<Button Command="{Binding AgregarStringDeConexionCommand}" Content="Axis 640x480" Margin="4, 2, 0, 0" Padding="0, 0, 0, 0" CommandParameter="/axis-media/media.amp?resolution=640x480&amp;fps=10"/>
+		</StackPanel>
 	</Grid>
 </Window>

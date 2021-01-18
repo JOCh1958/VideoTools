@@ -257,6 +257,34 @@ namespace VideoRecConFFMPEG.ViewModel
 					}
 				}
 			}
+
+		string LastRecFile_v = string.Empty;
+		public string LastRecFile
+			{
+			get => LastRecFile_v;
+			set
+				{
+				if (LastRecFile_v != value)
+					{
+					LastRecFile_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
+		public bool GenerarFicherosH264
+			{
+			get => model.GenerarFicherosH264;
+			set
+				{
+				if (model.GenerarFicherosH264 != value)
+					{
+					DatosDeConfiguracionModificados = true;
+					model.GenerarFicherosH264 = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
 		#endregion propiedades
 
 		#region funciones_de_comandos
@@ -393,12 +421,12 @@ namespace VideoRecConFFMPEG.ViewModel
 			if (camara.activa && camara.grabar)
 				{
 				// 2 horas de grabacion 7200, 30 minutos = 1800
-				string lineaFFMPEG = $"-rtsp_transport tcp -y -i rtsp://{camara.usuario}:{camara.password}@{camara.url}:{camara.portRtsp} -t {TiempoDeGrabacionesEnSegundos} ";
+				string lineaFFMPEG = $"-rtsp_transport tcp -y -t {TiempoDeGrabacionesEnSegundos} -i rtsp://{camara.usuario}:{camara.password}@{camara.url}:{camara.portRtsp}{camara.conexion} ";
 				//lineaFFMPEG += "-loglevel warning ";    // baja bastante el nivel de logs
 				//lineaFFMPEG += "-nostats ";             // no muy bueno
 				lineaFFMPEG += "-hide_banner ";         // solo elimina la info del principio
 				//lineaFFMPEG += "-loglevel error ";      // no muestra nada supongo que si hay error si
-				//lineaFFMPEG += "-loglevel quiet ";      // practicamente 0 info
+				lineaFFMPEG += "-loglevel quiet ";      // practicamente 0 info
 				//lineaFFMPEG += "-loglevel panic ";      // practicamente 0 info
 				//lineaFFMPEG += "-loglevel fatal ";      // practicamente 0 info
 				//lineaFFMPEG += "-loglevel warning ";    // pocos datos, sin banner y sin resumen
@@ -406,14 +434,18 @@ namespace VideoRecConFFMPEG.ViewModel
 				//lineaFFMPEG += "-loglevel verbose ";    // bastante info
 				//lineaFFMPEG += "-loglevel debug ";      // mucha info, mucha
 
-				string videoFile = System.IO.Path.Combine(dataDir, $"{camara.filePrefix}{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss.ffff")}.mp4");
+				string videoFile = System.IO.Path.Combine(dataDir, $"{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss.ffff")}.{camara.filePrefix}v1.{(GenerarFicherosH264 ? "h264" : "mp4")}");
+				LastRecFile = videoFile;
+
 				camara.camExe = new Extras.EjecucionDeApp(System.IO.Path.Combine(directorioFFMPEG, "ffmpeg.exe"), dataDir, lineaFFMPEG, videoFile);
 				camara.camExe.objPariente = camara;         // cross reference
 				camara.camExe.executionEnd += this.Exe_executionEnd;
 				LogDeActividad += $"Iniciando rec: {camara.camExe.appToExecute} {camara.camExe.parametrosDeEjecucion}\r\n";
 
-				ListaVideoFiles.Add(videoFile);
-				NotifyPropertyChanged("ListaVideoFiles");
+				List<string> lvf = new List<string>(ListaVideoFiles);
+				lvf.Add(videoFile);
+				ListaVideoFiles = lvf;
+				// NotifyPropertyChanged("ListaVideoFiles");
 
 				camara.camTask = Task.Run( () => camara.camExe.EjecuctarApp());
 				//camara.camExe.EjecuctarEnThread();
@@ -649,5 +681,146 @@ namespace VideoRecConFFMPEG.ViewModel
 				}
 			}
 		#endregion comandos
+
+#if false
+		private void btnAxisP1405_640x360_10fps(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.237";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "root";
+			this.password = "root";
+			this.stringDeConexion = "/axis-media/media.amp";
+			// parametrosExtra = "resolution=640x360&fps=18&compression=70";
+			this.parametrosExtra = "resolution=640x360&fps=10";
+			}
+
+		private void btnAxisP1405_1280x720_10fps(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.237";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "root";
+			this.password = "root";
+			this.stringDeConexion = "/axis-media/media.amp";
+			this.parametrosExtra = "resolution=1280x720&fps=10";
+			}
+
+		private void btnAxisP1405_1920x1080_10fps(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.237";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "root";
+			this.password = "root";
+			this.stringDeConexion = "/axis-media/media.amp";
+			this.parametrosExtra = "resolution=1920x1080&fps=10";
+			}
+
+		private void btnAxisP1013_640x360_10fps(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.230";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "root";
+			this.password = "root";
+			this.stringDeConexion = "/axis-media/media.amp";
+			this.parametrosExtra = "resolution=640x360&fps=10";
+			}
+
+		private void btnRocoAxis_Click(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.230";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "root";
+			this.password = "root";
+			this.stringDeConexion = "/axis-media/media.amp";
+			this.parametrosExtra = "resolution=640x360&fps=18";
+			this.parametrosExtra = "";
+			}
+
+		private void btnBalconCalle800x600_Click(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.186";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "root";
+			this.password = "root";
+			this.stringDeConexion = "/axis-media/media.amp";
+			this.parametrosExtra = "resolution=800x600&fps=10";
+			}
+
+		private void btnBalconCalle1280x720_Click(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.186";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "root";
+			this.password = "root";
+			this.stringDeConexion = "/axis-media/media.amp";
+			this.parametrosExtra = "resolution=1280x720&fps=10";
+			}
+
+		private void btnDahuaLPR(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.133";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "admin";
+			this.password = "admin";
+			this.stringDeConexion = "/cam/realmonitor";
+			// parametrosExtra = "channel=1&subtype=0&unicast=true&proto=Onvif";
+			this.parametrosExtra = "channel=1&subtype=0";
+			}
+
+		private void btnDahuaJorgeNewvery(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.150";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "admin";
+			this.password = "admin";
+			this.stringDeConexion = "/cam/realmonitor";
+			// parametrosExtra = "channel=1&subtype=0&unicast=true&proto=Onvif";
+			this.parametrosExtra = "channel=1&subtype=0";
+			}
+
+		private void btnDahuaJOCh01(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.0.50";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "admin";
+			this.password = "admin";
+			this.stringDeConexion = "/cam/realmonitor";
+			// parametrosExtra = "channel=1&subtype=0&unicast=true&proto=Onvif";
+			this.parametrosExtra = "channel=1&subtype=0";
+			}
+
+		private void btnDahuaJOCh02(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.0.51";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "admin";
+			this.password = "admin";
+			this.stringDeConexion = "/cam/realmonitor";
+			this.parametrosExtra = "channel=1&subtype=0";
+			}
+
+		private void btnDahuaVSS(object sender, RoutedEventArgs e)
+			{
+			this.host = "192.168.2.21";
+			this.portHTTP = "80";
+			this.portRTSP = "554";
+			this.usuario = "";
+			this.password = "";
+			this.stringDeConexion = "/578-2";
+			this.parametrosExtra = "";
+			}
+
+#endif
+
 		}
 	}

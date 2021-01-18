@@ -29,6 +29,7 @@ namespace VideoRecConFFMPEG.ViewModel
 			{
 			GuardarAgregarCamaraCommand = new Extras.RelayCommand(GuardarAgregarCamara, param => CanOperate);
 			CancelarCamaraCommand = new Extras.RelayCommand(CancelarCamara, param => CanOperate);
+			AgregarStringDeConexionCommand = new Extras.RelayCommand(AgregarStringDeConexion, param => CanOperate);
 			}
 
 		string WinTitulo_v = "Agregar camara nueva";
@@ -93,6 +94,20 @@ namespace VideoRecConFFMPEG.ViewModel
 				}
 			}
 
+		System.Windows.Input.ICommand AgregarStringDeConexionCommand_v;
+		public System.Windows.Input.ICommand AgregarStringDeConexionCommand
+			{
+			get => AgregarStringDeConexionCommand_v;
+			set
+				{
+				if (AgregarStringDeConexionCommand_v != value)
+					{
+					AgregarStringDeConexionCommand_v = value;
+					NotifyPropertyChanged();
+					}
+				}
+			}
+
 		#endregion comandos
 
 		#region funciones_de_comandos
@@ -104,6 +119,16 @@ namespace VideoRecConFFMPEG.ViewModel
 		void CancelarCamara(object algo)
 			{
 			View.AgregarEditarCamaraView.window.DialogResult = false;
+			}
+
+		void AgregarStringDeConexion(object parametro)
+			{
+			string stringDeConexion = parametro as string;
+			if (!string.IsNullOrWhiteSpace(stringDeConexion))
+				{
+				camara.conexion = stringDeConexion;
+				NotifyPropertyChanged("camara");
+				}
 			}
 
 		#endregion funciones_de_comandos

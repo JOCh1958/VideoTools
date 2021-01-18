@@ -3,18 +3,57 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoRecConFFMPEG", "VideoRecConFFMPEG\VideoRecConFFMPEG.csproj", "{445819D7-B788-4B49-9D5A-A0D51850E2FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VideoRecConFFMPEG", "VideoRecConFFMPEG\VideoRecConFFMPEG.csproj", "{445819D7-B788-4B49-9D5A-A0D51850E2FB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConexionesRTSP", "ConexionesRTSP\ConexionesRTSP.vcxproj", "{01078E95-59E5-49DD-A074-4F337F553F47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParserDeFilesH264", "ParserDeFilesH264\ParserDeFilesH264.csproj", "{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Debug|x64.Build.0 = Debug|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Debug|x86.Build.0 = Debug|Any CPU
 		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Release|x64.ActiveCfg = Release|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Release|x64.Build.0 = Release|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Release|x86.ActiveCfg = Release|Any CPU
+		{445819D7-B788-4B49-9D5A-A0D51850E2FB}.Release|x86.Build.0 = Release|Any CPU
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Debug|Any CPU.Build.0 = Debug|x64
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Debug|x64.ActiveCfg = Debug|x64
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Debug|x64.Build.0 = Debug|x64
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Debug|x86.ActiveCfg = Debug|Win32
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Debug|x86.Build.0 = Debug|Win32
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Release|Any CPU.ActiveCfg = Release|Win32
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Release|x64.ActiveCfg = Release|x64
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Release|x64.Build.0 = Release|x64
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Release|x86.ActiveCfg = Release|Win32
+		{01078E95-59E5-49DD-A074-4F337F553F47}.Release|x86.Build.0 = Release|Win32
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Debug|x64.Build.0 = Debug|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Debug|x86.Build.0 = Debug|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Release|x64.ActiveCfg = Release|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Release|x64.Build.0 = Release|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Release|x86.ActiveCfg = Release|Any CPU
+		{97E7F2D9-3BF4-4D04-82C2-B0407ED8B0F6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
